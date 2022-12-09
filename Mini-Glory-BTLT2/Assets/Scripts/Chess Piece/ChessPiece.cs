@@ -4,7 +4,6 @@ using UnityEngine;
 
 public enum ChessPieceType
 {
-    Empty = -1,
     Pawn = 0,
     Rook = 1,
     Knight = 2,
@@ -13,7 +12,6 @@ public enum ChessPieceType
 
 public enum ChessPieceTeam
 {
-    Empty = -1,
     White = 0,
     Black = 1
 }
@@ -29,10 +27,15 @@ public class ChessPiece : MonoBehaviour
     private Vector3 desiredPosition;
     private Vector3 desiredScale = Vector3.one;
 
+    private void Start() 
+    {
+        desiredPosition = new Vector3();
+    }
+
     private void Update()
     {
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 10);
-        transform.localScale = Vector3.Lerp(transform.localScale, desiredScale, Time.deltaTime * 10);
+        // transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 10);
+        // transform.localScale = Vector3.Lerp(transform.localScale, desiredScale, Time.deltaTime * 10);
     }
 
     public virtual List<Vector2Int> GetAvailableMoves(ref ChessPiece[,] board, int tileCountX, int tileCountY)
