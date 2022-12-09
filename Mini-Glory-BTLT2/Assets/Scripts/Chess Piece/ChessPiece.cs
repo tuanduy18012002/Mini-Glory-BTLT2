@@ -4,10 +4,18 @@ using UnityEngine;
 
 public enum ChessPieceType
 {
+    Empty = -1,
     Pawn = 0,
     Rook = 1,
     Knight = 2,
     Bishop = 3
+}
+
+public enum ChessPieceTeam
+{
+    Empty = -1,
+    White = 0,
+    Black = 1
 }
 
 public class ChessPiece : MonoBehaviour

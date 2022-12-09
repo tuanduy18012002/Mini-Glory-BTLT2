@@ -15,6 +15,13 @@ public class ChessBoard : MonoBehaviour
     Camera currentCamera;
     (int, int) index;
     // int pre_type_chess; 
+    ChessPieceType pre_type_chess; 
+
+    Bishop m_bishop;
+    Rook m_rook;
+    Pawn m_pawn;
+    Knight m_knight;
+    List<Vector2Int> availableMove;
 
 
     Cell[][] m_cells;
@@ -34,6 +41,7 @@ public class ChessBoard : MonoBehaviour
         DisplayChessBoard(size_row, size_col);
         rayLength = 100;
         index = (-1, -1);
+        pre_type_chess = ChessPieceType.Empty;
         // pre_type_chess = -1;
 
         //RegisterEvents();
@@ -56,15 +64,16 @@ public class ChessBoard : MonoBehaviour
                 ResetPre_Cell_color();
 
                 //test
-                ResetRookRoadColor(index.Item1, index.Item2);
+                // ResetRoadColor(index.Item1, index.Item2);
 
                 index = LookupCell(version.transform.gameObject);
                 if (index.Item1 != -1 && index.Item2 != -1)
                 {
                     m_cells[index.Item1][index.Item2].ChangeColor(2);
+                    pre_type_chess = m_cells[index.Item1][index.Item2].get_chp_type();
                     
                     //test
-                    DrawRookRoad(index.Item1, index.Item2);
+                    // DrawRoad(index.Item1, index.Item2);
                 }
             }
         }
@@ -172,6 +181,44 @@ public class ChessBoard : MonoBehaviour
             }
         }
     }
+
+    // void DrawRoad()
+    // {
+    //     if (pre_type_chess == ChessPieceType.Bishop)
+    //     {
+    //         availableMove = m_bishop.GetAvailableMoves(m_cells, index.Item1, index.Item2);
+    //     }
+    //     else if (pre_type_chess == ChessPieceType.Knight)
+    //     {
+    //         availableMove = m_knight.GetAvailableMoves(m_cells, index.Item1, index.Item2);
+    //     }
+    //     else if (pre_type_chess == ChessPieceType.Rook)
+    //     {
+    //         availableMove = m_rook.GetAvailableMoves(m_cells, index.Item1, index.Item2);
+    //     }
+    //     else if (pre_type_chess == ChessPieceType.Pawn)
+    //     {
+    //         availableMove = m_pawn.GetAvailableMoves(m_cells, index.Item1, index.Item2);
+    //     }
+
+
+    //     for (int i = 0; i < availableMove.Length(); i++)
+    //     {
+    //         m_cells[availableMove[i].x][availableMove[i].y].ChangeColor(3);
+    //     }
+    // }
+
+    // void ResetRoadColor(int posR, int posC)
+    // {
+    //     for (int i = 0; i < availableMove.Length(); i++)
+    //     {
+    //         if ((availableMove[i].x + availableMove[i].y) % 2 == 0)
+    //             m_cells[availableMove[i].x][availableMove[i].y].ChangeColor(0);
+    //         else
+    //             m_cells[availableMove[i].x][availableMove[i].y].ChangeColor(1);
+    //     }
+    // }
+
 
 
 
