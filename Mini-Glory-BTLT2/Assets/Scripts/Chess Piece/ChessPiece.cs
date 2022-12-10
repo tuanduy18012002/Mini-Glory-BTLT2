@@ -29,13 +29,13 @@ public class ChessPiece : MonoBehaviour
 
     private void Start() 
     {
-        desiredPosition = new Vector3();
+        desiredPosition = new Vector3((float)-currentX, 0.3f, (float)currentY);
     }
 
     private void Update()
     {
-        // transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 10);
-        // transform.localScale = Vector3.Lerp(transform.localScale, desiredScale, Time.deltaTime * 10);
+        this.transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 10);
+        //transform.localScale = Vector3.Lerp(transform.localScale, desiredScale, Time.deltaTime * 10);
     }
 
     public virtual List<Vector2Int> GetAvailableMoves(ref ChessPiece[,] board, int tileCountX, int tileCountY)
@@ -49,7 +49,10 @@ public class ChessPiece : MonoBehaviour
     {
         desiredPosition = position;
         if (force)
-            transform.position = desiredPosition;
+        {
+            this.transform.position = desiredPosition;
+            Debug.Log(transform.position);
+        }
     }
     // public virtual void SetScale(Vector3 scale, bool force = false)
     // {

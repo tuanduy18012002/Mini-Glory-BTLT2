@@ -128,21 +128,20 @@ public class ChessBoard : MonoBehaviour
         return Instantiate(cell, spawnPos, Quaternion.identity) as GameObject;
     }
 
-    // (int, int) LookupCell(GameObject hitVer)
-    // {
-    //     Cell temp = hitVer.GetComponent<Cell>();
-    //     for (int i = 0; i < size_row; i++)
-    //     {
-    //         for (int j = 0; j < size_col; j++)
-    //         {
-    //             if (m_cells[i][j] == temp)
-    //             {
-    //                 return (i, j);
-    //             }
-    //         }
-    //     }
-    //     return (-1, -1);
-    // }
+    public Vector2Int LookupCell(Cell temp, int size_row, int size_col)
+    {
+        for (int i = 0; i < size_row; i++)
+        {
+            for (int j = 0; j < size_col; j++)
+            {
+                if (m_cells[i][j] == temp)
+                {
+                    return new Vector2Int(i, j);
+                }
+            }
+        }
+        return new Vector2Int();
+    }
 
     // void ResetPre_Cell_color()
     // {

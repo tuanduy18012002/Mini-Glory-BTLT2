@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour
     public int size_col;
 
     ChessPiece[,] posChess;
+    ChessPiece currentDragging;
     private RaycastHit version;
     float rayLength;
     Camera currentCamera;
@@ -51,14 +52,50 @@ public class GameController : MonoBehaviour
         Ray ray = currentCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out version, rayLength))
         {
-            if (version.collider.tag == "Bishop_White" || version.collider.tag == "Bishop_Black" || version.collider.tag == "Knight_White" || version.collider.tag == "Knight_Black" || version.collider.tag == "Pawn_White" || version.collider.tag == "Pawn_Black" || version.collider.tag == "Rook_White" || version.collider.tag == "Rook_Black")
+            if (version.collider.tag == "Cell" || version.collider.tag == "Bishop_White" || version.collider.tag == "Bishop_Black" || version.collider.tag == "Knight_White" || version.collider.tag == "Knight_Black" || version.collider.tag == "Pawn_White" || version.collider.tag == "Pawn_Black" || version.collider.tag == "Rook_White" || version.collider.tag == "Rook_Black")
             {
                 Vector2Int index = LookupChessPos(version.transform.gameObject);
+                
+                if (version.collider.tag != "Cell")
+                {
+                    ChessPiece tmp = version.transform.gameObject.GetComponent<ChessPiece>();
+                    List<Vector2Int> availableMove = tmp.GetAvailableMoves(ref posChess, size_col, size_row);
+                    m_chessboard.DrawRoad(availableMove);
+                }
+                else
+                {
+                    m_chessboard.ResetRoadColor(); 
+                }
 
-                ChessPiece tmp = version.transform.gameObject.GetComponent<ChessPiece>();
-                List<Vector2Int> availableMove = tmp.GetAvailableMoves(ref posChess, size_col, size_row);
-                m_chessboard.DrawRoad(availableMove);
+
+                //Move chess
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (posChess[index.x, index.y] != null)
+                    {
+                        //Is it our turn?
+                        if (true)
+                        {
+                            currentDragging = posChess[index.x, index.y];
+                        }
+                    }
+                }
+
+                if (currentDragging != null && Input.GetMouseButtonUp(0))
+                {
+                    Vector2Int previousPos = new Vector2Int(currentDragging.currentX, currentDragging.currentY);
+                    index = LookupChessPos(version.transform.gameObject);
+                    bool validMove = MoveTo(currentDragging, index.x, index.y);
+                    if (!validMove)
+                    {
+                        currentDragging = null;
+                    }
+                }
             }
+            // else if (version.collider.tag == "Cell")
+            // {
+            //     Vector2Int index = LookupChessPos(version.transform.gameObject, 0);
+            // }
             else
             {
                 m_chessboard.ResetRoadColor();
@@ -71,7 +108,7 @@ public class GameController : MonoBehaviour
         Vector3 spawnPos = new Vector3(m_default_posX - cell_x, m_default_posY, m_default_posZ + cell_z);
         //Update posChess
         posChess[(int)cell_x, (int)cell_z] = chess.GetComponent<ChessPiece>();
-        posChess[(int)cell_x, (int)cell_z].SetPosition(spawnPos, true);
+        // posChess[(int)cell_x, (int)cell_z].SetPosition(spawnPos, true);
         posChess[(int)cell_x, (int)cell_z].currentX = (int)cell_x;
         posChess[(int)cell_x, (int)cell_z].currentY = (int)cell_z;
 
@@ -107,7 +144,33 @@ public class GameController : MonoBehaviour
 
     Vector2Int LookupChessPos(GameObject hitVer)
     {
-        ChessPiece temp = hitVer.GetComponent<ChessPiece>();
-        return new Vector2Int(temp.currentX, temp.currentY);
+        // if (type == 1)
+        // {
+        //     ChessPiece temp = hitVer.GetComponent<ChessPiece>();
+        //     return new Vector2Int(temp.currentX, temp.currentY);
+        // }
+        // else
+        // {
+        //     Cell temp = hitVer.GetComponent<Cell>();
+        //     return vector2Int((int)temp.transfor)
+        // }
+
+        return new Vector2Int((int)-hitVer.transform.position.x, (int)hitVer.transform.position.z);
+
+    }
+
+    bool MoveTo(ChessPiece cp, int desX, int desY)
+    {
+        Vector2Int previousPos = new Vector2Int(cp.currentX, cp.currentY);
+
+        //Di chuyển
+        cp.currentX = desX;
+        cp.currentY = desY;
+        cp.SetPosition(new Vector3(m_default_posX - desX, m_default_posY, m_default_posZ + desY), false);
+
+        posChess[desX, desY] = cp;
+        posChess[previousPos.x, previousPos.y] = null;
+
+        return true;
     }
 }
