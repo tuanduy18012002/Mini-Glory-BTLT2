@@ -56,7 +56,7 @@ public class GameController : MonoBehaviour
                 Vector2Int index = LookupChessPos(version.transform.gameObject);
 
                 ChessPiece tmp = version.transform.gameObject.GetComponent<ChessPiece>();
-                List<Vector2Int> availableMove = tmp.GetAvailableMoves(ref posChess, tmp.currentX + 1, tmp.currentY + 1);
+                List<Vector2Int> availableMove = tmp.GetAvailableMoves(ref posChess, size_col, size_row);
                 m_chessboard.DrawRoad(availableMove);
             }
             else

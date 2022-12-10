@@ -44,9 +44,9 @@ public class Rook : ChessPiece
             if (board[i, currentY] == null)
                 r.Add(new Vector2Int(i, currentY));
 
-            if (board[currentX, i] != null)
+            if (board[i, currentY] != null)
             {
-                if (board[currentX, i].team != team)
+                if (board[i, currentY].team != team)
                     r.Add(new Vector2Int(i, currentY));
 
                 break;
